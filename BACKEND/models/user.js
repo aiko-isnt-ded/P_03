@@ -1,7 +1,11 @@
-let nextUserID = 1;
+// =======================
+// API stuff
+// =======================
+const fs = require('fs');
+let users_data = JSON.parse(fs.readFileSync('./database/users.json'))
 
 function getNextUserID() {
-    return nextUserID++;
+    return users_data.length + 1;
 }
 
 class UserException {
@@ -54,7 +58,7 @@ class User {
         }
 
         // Check if email is unique
-        if (data.users.some(user => user.email == email && user.id != this.#id)) {
+        if (users_data.some(user => user.email == email && user.id != this.#id)) {
             throw new UserException("Email is already in use.")
         }
 
@@ -67,6 +71,10 @@ class User {
         }
         if(password.length < 8) {
             throw new UserException("Password MUST have a minimum of 8 characters.")
+        }
+        // Check if password is unique
+        if (users_data.some(user => user.password == password && user.id != this.#id)) {
+            throw new UserException("Password has to be unique.")
         }
 
         this.#password = password;
@@ -100,4 +108,19 @@ class User {
         return this.#joined_at;
     }
 
+    // ====================
+    // To Object
+    // ====================
+
+    toObj() {
+        return {
+            id: this.id,
+            name: this.name,
+            email: this.email,
+            password: this.password,
+            joined_at: this.joined_at
+        };
+    }
 }
+
+module.exports = User;

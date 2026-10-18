@@ -1,0 +1,42 @@
+// =======================
+// Test Routes
+// =======================
+
+### Root / no Auth: Login
+GET http://localhost:3000/
+
+### Root / with Auth: Home
+GET http://localhost:3000/
+x-auth: test
+
+### Home / no Auth: 401
+GET http://localhost:3000/home.html
+
+### Home / with Auth: Home
+GET http://localhost:3000/home.html
+x-auth: test
+
+### Login: Login
+GET http://localhost:3000/login.html
+
+### Tasks / no Auth: 401
+GET http://localhost:3000/tasks.html
+
+### Tasks / with Auth: Tasks
+GET http://localhost:3000/tasks.html
+x-auth: test
+
+// =======================
+// Users
+// =======================
+
+###
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "name": "Yoo Joonghyuk",
+    "email": "yoo_joonghyuk@kimcom.com",
+    "password": "gH12fHfds#",
+    "confirm_password": "gH12fHfds#"
+}

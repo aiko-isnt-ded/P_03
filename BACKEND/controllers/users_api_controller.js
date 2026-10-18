@@ -1,5 +1,59 @@
 // =======================
-// Functions
+// API Imports
+// =======================
+
+// Import Library
+const fs = require('fs');
+// Import User Model
+const User = require('../models/user');
+// Load JSON DB
+let users = JSON.parse(fs.readFileSync('./database/users.json'));
+
+// =======================
+// API Functions
+// =======================
+
+exports.authUsersMiddleware = (req, res, next) => {
+    try {
+        // Check whether a password was entered
+        let pwd = req.get('x-auth');
+        if (!pwd) return res.stats(401).send('Password is missing');
+
+        // Find a user
+        let res_user = users.find(i => String(i.id) === req.params.id);
+        if (!res_user) return res.status(404).send('User Not Found');
+
+        // Check whether password is valid
+        if (res_user.password !== pwd) return res.status(401).send('Wrong password');
+
+        // If everything's well
+        req.user = res_user;
+        next()
+    } catch(err) {
+        return res.status(400).send(err.message);
+    }
+}
+
+// POST Method to Register User
+exports.registerUser = (req, res) => {
+    try {
+        // Check that both passwords match
+        if (req.body.password != req.body.confirm_password) res.status(400).send('Password Mismatch');
+        // If password is correct
+        else {
+            // 
+            let new_user = new User(req.body.name, req.body.email, req.body.password);
+            users.push(new_user.toObj());
+            fs.writeFileSync('./database/users.json', JSON.stringify(users, null, 2));
+            res.send('New User Registered');
+        } 
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
+}
+
+// =======================
+// CRUD Functions
 // =======================
 
 function createUser(name, email, password) {

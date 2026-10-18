@@ -1,0 +1,63 @@
+// Imports
+const express = require('express');
+const path = require('path');
+
+// Build router
+const routerApi = express.Router();
+
+// =======================
+// Auth Middleware
+// =======================
+
+const authMiddleware = (req, res, next) => {
+    // Checks whether the header exists
+    if(req.headers['x-auth']) {
+        next();
+    }
+    else {
+        res.sendStatus(401);
+    }
+};
+
+// ======================= 
+// Routes Middlewares
+// =======================
+const userRoutes = require('./users');
+routerApi.use('/users', userRoutes);
+
+// =======================
+// Route paths
+// =======================
+
+routerApi.get(
+    '/', 
+    (req, res) => {
+        if(req.headers['x-auth']) {
+            res.sendFile(path.resolve(__dirname + "/../../FRONTEND/views/home.html"));
+        }
+        else {
+            res.sendFile(path.resolve(__dirname + "/../../FRONTEND/views/login.html"));
+        }
+    }
+);
+
+// Public
+routerApi.get(
+    '/login.html',
+    (req, res) => res.sendFile(path.resolve(__dirname + "/../../FRONTEND/views/login.html"))
+);
+
+// Protected
+routerApi.get(
+    '/home.html', authMiddleware,
+    (req, res) => res.sendFile(path.resolve(__dirname + "/../../FRONTEND/views/home.html"))
+);
+
+// Protected
+routerApi.get(
+    '/tasks.html', authMiddleware,
+    (req, res) => res.sendFile(path.resolve(__dirname + "/../../FRONTEND/views/tasks.html"))
+);
+
+// Export router
+module.exports = routerApi;
