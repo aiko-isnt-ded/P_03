@@ -1,12 +1,17 @@
 // =======================
 // API stuff
 // =======================
+
 const fs = require('fs');
 let users_data = JSON.parse(fs.readFileSync('./database/users.json'))
 
 function getNextUserID() {
     return users_data.length + 1;
 }
+
+// =======================
+// Model
+// =======================
 
 class UserException {
     constructor(errorMessage) {

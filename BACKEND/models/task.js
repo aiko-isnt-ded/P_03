@@ -1,8 +1,21 @@
-let nextTaskID = 1;
+// =======================
+// API stuff
+// =======================
+
+const fs = require('fs');
+
+// Read database files
+let tasks_data = JSON.parse(fs.readFileSync('./database/tasks.json'))
+let users_data = JSON.parse(fs.readFileSync('./database/users.json'))
+let tags_data = JSON.parse(fs.readFileSync('./database/tags.json'))
 
 function getNextTaskID() {
-    return nextTaskID++;
+    return tasks_data.length + 1;
 }
+
+// =======================
+// API stuff
+// =======================
 
 class TaskException {
     constructor(errorMessage) {
@@ -19,18 +32,18 @@ class Task {
     #title;
     #description;
     #due_date;
-    #owner;
+    #id_user;
     #status;
     #tags;
 
     // ====================
     // Constructor
     // ====================
-    constructor(title, due_date, description, owner, status, tags = []) {
+    constructor(title, description, due_date, id_user, status, tags = []) {
         this.title = title;
-        this.due_date = due_date;
         this.description = description;
-        this.owner = owner;
+        this.due_date = due_date;
+        this.id_user = id_user;
         this.status = status;
         this.tags = tags;
         this.#id = getNextTaskID();
@@ -49,6 +62,10 @@ class Task {
         this.#title = title;
     }
 
+    set description(description) {
+        this.#description = description;    
+    }
+
     set due_date(due_date) {
         if (isNaN(new Date(due_date).getTime())) {
             throw new TaskException("Due Date is NOT valid (must be yyyy/mm/dd).")
@@ -57,17 +74,18 @@ class Task {
         this.#due_date = due_date;
     }
 
-    set description(description) {
-        this.#description = description;    
-    }
-
-    set owner(owner) {
-        // Check if user exists
-        if (!data.users.some(user => user.id == owner)) {
-            throw new TaskException(`User with ID ${owner} does NOT exist.`);
+    set id_user(id_user) {
+        if (id_user.length === 0)
+        {
+            throw new TaskException("User CANNOT be empty.");
         }
 
-        this.#owner = owner;
+        // Check if user exists
+        if (users_data.filter(i => i['id'] === id_user).length === 0) {
+            throw new TaskException(`User with ID ${id_user} does NOT exist.`);
+        }
+
+        this.#id_user = id_user;
     }
 
     set status(status) {
@@ -93,7 +111,7 @@ class Task {
         // Check that tag exists
         for (let i = 0; i < tags.length; i++) {
             // Match a tag with the id
-            let tagExists = data.tags.some(tag => tag.id == tags[i]);
+            let tagExists = tags_data.some(tag => tag.id == tags[i]);
 
             // Case: Tag doesn't exist
             if (!tagExists) {
@@ -124,8 +142,8 @@ class Task {
         return this.#due_date;
     }
 
-    get owner() {
-        return this.#owner;
+    get id_user() {
+        return this.#id_user;
     }
 
     get status() {
@@ -135,4 +153,22 @@ class Task {
     get tags() {
         return this.#tags;
     }
+
+    // ====================
+    // To Object
+    // ====================
+
+    toObj() {
+        return {
+            id: this.id,
+            title: this.title,
+            description: this.description,
+            due_date: this.due_date,
+            id_user: this.id_user,
+            status: this.status,
+            tags: this.tags
+        };
+    }
 }
+
+module.exports = Task;

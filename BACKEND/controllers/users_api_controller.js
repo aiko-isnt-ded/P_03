@@ -17,7 +17,7 @@ exports.authUsersMiddleware = (req, res, next) => {
     try {
         // Check whether a password was entered
         let pwd = req.get('x-auth');
-        if (!pwd) return res.stats(401).send('Password is missing');
+        if (!pwd) return res.status(401).send('Password is missing');
 
         // Find a user
         let res_user = users.find(i => String(i.id) === req.params.id);

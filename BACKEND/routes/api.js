@@ -26,6 +26,9 @@ const authMiddleware = (req, res, next) => {
 const userRoutes = require('./users');
 routerApi.use('/users', userRoutes);
 
+const taskRoutes = require('./tasks');
+routerApi.use('/tasks', taskRoutes);
+
 // =======================
 // Route paths
 // =======================

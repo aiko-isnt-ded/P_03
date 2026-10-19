@@ -65,3 +65,22 @@ Content-Type: application/json
 ###
 DELETE http://localhost:3000/users/4
 x-auth: 123456789
+
+// =======================
+// Tasks
+// =======================
+
+// Create Task
+###
+POST http://localhost:3000/tasks
+x-auth: yjhs-apologist
+Content-Type: application/json
+
+{
+    "title": "Self-Sacrifice for the Eleventh Time",
+    "description": "self-descriptive",
+    "due_date": "2026-10-17",
+    "id_user": 1,
+    "status": "C",
+    "tags": [1]
+}
