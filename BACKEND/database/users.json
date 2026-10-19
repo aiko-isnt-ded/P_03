@@ -12,5 +12,12 @@
     "email": "yoo_joonghyuk@kimcom.com",
     "password": "gH12fHfds#",
     "joined_at": "2026-10-18T19:05:38.617Z"
+  },
+  {
+    "id": 3,
+    "name": "Han Sooyoung",
+    "email": "han_sooyoung@kimcom.com",
+    "password": "bestWriter123",
+    "joined_at": "2026-10-18T19:17:48.549Z"
   }
 ]

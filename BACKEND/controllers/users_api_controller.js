@@ -52,6 +52,111 @@ exports.registerUser = (req, res) => {
     }
 }
 
+// GET all users
+exports.usersPage = (req, res) => {
+    try {
+        // Check whether user has valid permits
+        if (req.get('x-auth') !== 'admin_auth') res.status(401).send("Wrong Admin Credentials");
+        // If user has valid permits
+        else {
+            let page = parseInt(req.query.page);
+            let limit = parseInt(req.query.limit);
+
+            let start = (page - 1) * limit;
+            let end = start + limit;
+            let res_users = users.slice(start, end);
+
+            // Send response to user
+            res.json({
+                page: page,
+                next_page: page + 1,
+                limit: limit, 
+                tptañ: users.length,
+                data: res_users
+            })
+        }
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
+}
+
+// GET user based on ID
+exports.getUserFromID = (req, res) => {
+    try {
+        res.json(req.user);
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
+}
+
+// PATCH user based on ID
+exports.patchUser = (req, res) => {
+    try {
+        // Get body of the request
+        let body = req.body;
+
+        // Updatable fields
+        let fields = ['name', 'email', 'password'];
+        let changes = {};
+
+        // Iterate through the fields of the request body
+        for (const i of fields) {
+            // If field exists, change the field in body
+            if (i in body) {
+                changes[i] = body[i];
+            }
+        }
+
+        // Error message: No valid fields
+        if (Object.keys(changes).length === 0) {
+            res.status(400).send('No valid fields were given');
+        }
+        // Error message: email is already in use
+        if (changes.email && users.some(i => String(i.email) === changes.email && String(i.id) !== req.params.id)) {
+            res.status(403).send("Email already in use");
+        }
+
+        // Find the user 
+        let index = users.findIndex(i => String(i.id) === req.params.id);
+        // Create updated user
+        let new_user = {...users[index], ...changes};
+        // Update the user
+        let updated_users = [...users];
+        updated_users[index] = new_user;
+    
+        fs.writeFileSync('./database/users.json', JSON.stringify(updated_users, null, 2));
+        users = updated_users;
+
+        res.json ({
+            message: "User updated successfully!",
+            user: new_user
+        });
+    } catch {
+        res.status(400).send(err.message);
+    }
+}
+
+// DELETE User based on ID
+exports.deleteUser = (req, res) => {
+    try {
+        let index = users.findIndex(i => String(i.id) === req.params.id);
+        let deleted_user = {...users[index]};
+        let users_updated = users.filter(i => String(i.id) !== req.params.id);
+
+        // Update users
+        fs.writeFileSync('./database/users.json', JSON.stringify(users_updated, null, 2));
+        users = users_updated;
+
+        // Response
+        res.json ({
+            message: `User with ID ${req.params.id} deleted`,
+            user: deleted_user
+        });
+    } catch (err) {
+        res.status(400).send(err.message);
+    }
+}
+
 // =======================
 // CRUD Functions
 // =======================
@@ -113,7 +218,7 @@ function updateUser(id, obj_new_info) {
     return updated;
 }
 
-function deleteUser(id) {
+function oldDeleteUser(id) {
     let index = data.users.findIndex(user => user.id == id);
 
     if (index == -1) {

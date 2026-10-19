@@ -22,6 +22,7 @@ const authMiddleware = (req, res, next) => {
 // ======================= 
 // Routes Middlewares
 // =======================
+
 const userRoutes = require('./users');
 routerApi.use('/users', userRoutes);
 

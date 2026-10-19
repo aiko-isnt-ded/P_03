@@ -10,9 +10,20 @@ const routerUsers = express.Router();
 // Routes
 // =======================
 
+// POST Method
 routerUsers.post('/', usersController.registerUser);
 
-// routerUsers.use('/:id', usersController)
+// GET Methods
+routerUsers.get("/", usersController.usersPage);
+
+routerUsers.use('/:id', usersController.authUsersMiddleware);
+routerUsers.get('/:id', usersController.getUserFromID);
+
+// PATCH Method
+routerUsers.patch('/:id', usersController.patchUser);
+
+// DELETE Method
+routerUsers.delete('/:id', usersController.deleteUser);
 
 // Export router
 module.exports = routerUsers;

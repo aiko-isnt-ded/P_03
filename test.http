@@ -35,8 +35,33 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-    "name": "Yoo Joonghyuk",
-    "email": "yoo_joonghyuk@kimcom.com",
-    "password": "gH12fHfds#",
-    "confirm_password": "gH12fHfds#"
+    "name": "Yoo Sangah",
+    "email": "yoo_sangah@kimcom.com",
+    "password": "123456789",
+    "confirm_password": "123456789"
 }
+
+// Get all users
+### 
+GET http://localhost:3000/users?page=1&limit=2
+x-auth: admin_auth
+
+// Get specific user
+### 
+GET http://localhost:3000/users/4
+x-auth: 123456789
+
+// Update user
+### 
+PATCH http://localhost:3000/users/4
+x-auth: 123456789
+Content-Type: application/json
+
+{
+    "password": "987654321"
+}
+
+// Delete user
+###
+DELETE http://localhost:3000/users/4
+x-auth: 123456789
