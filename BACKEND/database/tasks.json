@@ -1,7 +1,22 @@
 [
-    {
-        "id": 1, 
-        "name": "urgent",
-        "color": "#8B0000"
-    }
+  {
+    "id": 2,
+    "title": "Clean Dirty Dishes",
+    "description": "self-descriptive",
+    "due_date": "2026-10-18T00:00:00.000Z",
+    "id_user": 1,
+    "status": "A",
+    "tags": []
+  },
+  {
+    "id": 2,
+    "title": "Annoy my s/os",
+    "description": "self-descriptive",
+    "due_date": "2026-10-18T00:00:00.000Z",
+    "id_user": 1,
+    "status": "C",
+    "tags": [
+      1
+    ]
+  }
 ]

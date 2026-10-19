@@ -77,9 +77,9 @@ x-auth: yjhs-apologist
 Content-Type: application/json
 
 {
-    "title": "Self-Sacrifice for the Eleventh Time",
+    "title": "Annoy my s/os",
     "description": "self-descriptive",
-    "due_date": "2026-10-17",
+    "due_date": "2026-10-18",
     "id_user": 1,
     "status": "C",
     "tags": [1]

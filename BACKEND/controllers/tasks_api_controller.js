@@ -70,6 +70,31 @@ exports.registerTask = (req, res) => {
     }
 }
 
+// GET Method to Search ALL tasks of a user
+exports.tasksPage = (req, res) => {
+    try {
+        let page = parseInt(req.query.page);
+        let limit = parseInt(req.query.limit);
+
+        // Get user tasks
+        let user_tasks = tasks.filter(i => String(i.id_user) === String(req.user.id));
+        
+        let start = (page - 1) * limit;
+        let end = start + limit;
+
+        // Send response
+        res.json({
+            page: page,
+            next_page: page + 1,
+            limit: limit,
+            total: tasks.length,
+            data: user_tasks.slice(start, end)
+        });
+    } catch(err) {
+        return res.status(400).send(err.message);
+    }
+}
+
 // =======================
 // Functions
 // =======================

@@ -17,7 +17,7 @@ const routerTasks = express.Router();
 routerTasks.post('/', tasksController.authTasksMiddleware, tasksController.registerTask);
 
 // // GET Methods
-// routerTasks.get("/", usersController.usersPage);
+routerTasks.get('/', tasksController.authTasksMiddleware, tasksController.tasksPage);
 
 // routerTasks.use('/:id', usersController.authUsersMiddleware);
 // routerTasks.get('/:id', usersController.getUserFromID);
