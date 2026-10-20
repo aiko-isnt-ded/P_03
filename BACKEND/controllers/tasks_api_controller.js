@@ -178,6 +178,32 @@ exports.patchTask = (req, res) => {
     }
 }
 
+exports.deleteTask = (req, res) => {
+    try {
+        // Get task index
+        let index = tasks.findIndex(i => String(i.id) === req.params.id && String(i.id_user) === String(req.user.id));
+
+        // If no index found
+        if (index === -1) return res.status(404).send('Task not Found');
+
+        // If task was found
+        let deleted_task = {...tasks[index]};
+        let new_tasks = tasks.filter(i => String(i.id) !== req.params.id);
+
+        // Write new file
+        fs.writeFileSync('./database/tasks.json', JSON.stringify(new_tasks, null, 2));
+        tasks = new_tasks;
+
+        // Send response
+        res.json({
+            message: `Task with ID ${req.params.id} was successfully deleted`,
+            task: deleted_task
+        });
+    } catch(err) {
+        return res.status(400).send(err.message);
+    }
+}
+
 // =======================
 // Functions
 // =======================
@@ -239,7 +265,7 @@ function updateTask(id, obj_new_info) {
     return updated;
 }
 
-function deleteTask(id) {
+function oldDeleteTask(id) {
     let index = data.tasks.findIndex(task => task.id == id);
 
     if (index == -1) {

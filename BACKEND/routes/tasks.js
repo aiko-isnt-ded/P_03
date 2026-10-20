@@ -24,8 +24,8 @@ routerTasks.get('/:id', tasksController.authTasksMiddleware2, tasksController.se
 // PATCH Method
 routerTasks.patch('/:id', tasksController.authTasksMiddleware2, tasksController.patchTask);
 
-// // DELETE Method
-// routerTasks.delete('/:id', usersController.deleteUser);
+// DELETE Method
+routerTasks.delete('/:id', tasksController.authTasksMiddleware2, tasksController.deleteTask);
 
 // Export router
 module.exports = routerTasks;

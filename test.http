@@ -90,11 +90,6 @@ Content-Type: application/json
 GET http://localhost:3000/tasks?page=1&limit=2
 x-auth: yjhs-apologist
 
-// Search All User's Tasks
-###
-GET http://localhost:3000/tasks?page=1&limit=2
-x-auth: yjhs-apologist
-
 // Get specific task
 ### 
 GET http://localhost:3000/tasks/3
@@ -109,3 +104,8 @@ Content-Type: application/json
 {
     "description": "Gotta find new ways to annoy Sooyoung-ah"
 }
+
+// Delete task
+###
+DELETE http://localhost:3000/tasks/2
+x-auth: yjhs-apologist
