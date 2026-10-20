@@ -1,5 +1,16 @@
 [
   {
+    "id": 1,
+    "title": "Self-Sacrifice for the Eleventh Time",
+    "description": "self-descriptive",
+    "due_date": "2026-10-16T00:00:00.000Z",
+    "id_user": 1,
+    "status": "C",
+    "tags": [
+      1
+    ]
+  },
+  {
     "id": 2,
     "title": "Clean Dirty Dishes",
     "description": "self-descriptive",
@@ -9,10 +20,10 @@
     "tags": []
   },
   {
-    "id": 2,
-    "title": "Annoy my s/os",
+    "id": 3,
+    "title": "Annoy my s/o's",
     "description": "self-descriptive",
-    "due_date": "2026-10-18T00:00:00.000Z",
+    "due_date": "2026-10-20T00:12:26.190Z",
     "id_user": 1,
     "status": "C",
     "tags": [

@@ -39,6 +39,23 @@ exports.authTasksMiddleware = (req, res, next) => {
     }
 }
 
+exports.authTasksMiddleware2 = (req, res, next) => {
+    try {
+        // Check whether a password was entered
+        let pwd = req.get('x-auth');
+        if (!pwd) return res.status(401).send("Did not provide password!");
+
+        // Find users based on password
+        let found_user = users.find(i => String(i.password) === pwd);
+        if (!found_user) return res.status(404).send("User Not Found");
+
+        req.user = found_user;
+        next();
+    } catch (err) {
+        return res.status(400).send(err.message);
+    }
+}
+
 // POST Method to Create Task
 exports.registerTask = (req, res) => {
     try {
@@ -71,7 +88,7 @@ exports.registerTask = (req, res) => {
 }
 
 // GET Method to Search ALL tasks of a user
-exports.tasksPage = (req, res) => {
+exports.userTasks = (req, res) => {
     try {
         let page = parseInt(req.query.page);
         let limit = parseInt(req.query.limit);
@@ -89,6 +106,73 @@ exports.tasksPage = (req, res) => {
             limit: limit,
             total: tasks.length,
             data: user_tasks.slice(start, end)
+        });
+    } catch(err) {
+        return res.status(400).send(err.message);
+    }
+}
+
+// GET Method to Search a Task based on ID
+exports.searchTaskbyID = (req, res) => {
+    try {
+        // Search for a task based on ID
+        let found_task = tasks.find(i => String(i.id_user) === String(req.user.id) && String(i.id) === req.params.id);
+        
+        // If no task was found
+        if (!found_task) return res.status(404).send('Task not Found');
+    
+        // Return response
+        res.json(found_task);
+    } catch(err) {
+        return res.status(400).send(err.message);
+    }
+}
+
+// PATCH Method to Update a Task by ID
+exports.patchTask = (req, res) => {
+    try {
+        // Get body of the request
+        let body = req.body;
+
+        // Updatable fields
+        let fields = ['title', 'description', 'due_date', 'status', 'tags'];
+        let changes = {};
+
+        // Iterate through the fields of the request body
+        for (const i of fields) {
+            // If field exists, change the field in body
+            if (i in body) {
+                changes[i] = body[i];
+            }
+        }
+
+        // Error message: No valid fields
+        if (Object.keys(changes).length === 0) {
+            return res.status(400).send('No valid fields were given');
+        }
+
+        // Find the task
+        let index = tasks.findIndex(i => String(i.id) === req.params.id && String(i.id_user) === String(req.user.id));
+        if (index === -1) {
+            return res.status(404).send("Task not Found");
+        }
+
+        // Create updated task
+        let data = {...tasks[index], ...changes};
+        let new_task = new Task(data.title, data.description, data.due_date, 
+            data.id_user, data.status, data.tags);
+        let updated_task = {...new_task.toObj(), id: tasks[index].id};
+
+        // Update the task
+        let updated_tasks = [...tasks];
+        updated_tasks[index] = updated_task;
+    
+        fs.writeFileSync('./database/tasks.json', JSON.stringify(updated_tasks, null, 2));
+        tasks = updated_tasks;
+
+        res.json ({
+            message: "Task updated successfully!",
+            task: updated_task
         });
     } catch(err) {
         return res.status(400).send(err.message);

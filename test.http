@@ -77,10 +77,35 @@ x-auth: yjhs-apologist
 Content-Type: application/json
 
 {
-    "title": "Annoy my s/os",
+    "title": "Annoy my s/o's",
     "description": "self-descriptive",
-    "due_date": "2026-10-18",
+    "due_date": "",
     "id_user": 1,
     "status": "C",
     "tags": [1]
+}
+
+// Search All User's Tasks
+###
+GET http://localhost:3000/tasks?page=1&limit=2
+x-auth: yjhs-apologist
+
+// Search All User's Tasks
+###
+GET http://localhost:3000/tasks?page=1&limit=2
+x-auth: yjhs-apologist
+
+// Get specific task
+### 
+GET http://localhost:3000/tasks/3
+x-auth: yjhs-apologist
+
+// Update task
+### 
+PATCH http://localhost:3000/tasks/3
+x-auth: yjhs-apologist
+Content-Type: application/json
+
+{
+    "description": "Gotta find new ways to annoy Sooyoung-ah"
 }

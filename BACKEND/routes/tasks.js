@@ -16,14 +16,13 @@ const routerTasks = express.Router();
 // POST Method
 routerTasks.post('/', tasksController.authTasksMiddleware, tasksController.registerTask);
 
-// // GET Methods
-routerTasks.get('/', tasksController.authTasksMiddleware, tasksController.tasksPage);
+// GET Methods
+routerTasks.get('/', tasksController.authTasksMiddleware2, tasksController.userTasks);
 
-// routerTasks.use('/:id', usersController.authUsersMiddleware);
-// routerTasks.get('/:id', usersController.getUserFromID);
+routerTasks.use('/:id', tasksController.authTasksMiddleware2, tasksController.searchTaskbyID);
 
-// // PATCH Method
-// routerTasks.patch('/:id', usersController.patchUser);
+// PATCH Method
+routerTasks.patch('/:id', tasksController.authTasksMiddleware2, tasksController.patchTask);
 
 // // DELETE Method
 // routerTasks.delete('/:id', usersController.deleteUser);
