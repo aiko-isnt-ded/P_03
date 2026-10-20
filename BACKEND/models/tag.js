@@ -1,8 +1,21 @@
-let nextTagID = 1;
+// =======================
+// API stuff
+// =======================
+
+const fs = require('fs');
+
+// Read database files
+let tags_data = JSON.parse(fs.readFileSync('./database/tags.json'))
+let users_data = JSON.parse(fs.readFileSync('./database/users.json'))
+
 
 function getNextTagID() {
-    return nextTagID++;
+    return tags_data.length + 1;
 }
+
+// =======================
+// Model
+// =======================
 
 class TagException {
     constructor(errorMessage) {
@@ -18,14 +31,16 @@ class Tag {
     #id;
     #name;
     #color;
+    #id_user;
 
     // ====================
     // Constructor
     // ====================
-    constructor(name, color) {
+    constructor(name, color, id_user) {
+        this.#id = getNextTagID();                 // Auto-generated & unmodifiable                     
         this.name = name;
         this.color = color;   
-        this.#id = getNextTagID();                 // Auto-generated & unmodifiable                     
+        this.id_user = id_user;
     }
 
     // ====================
@@ -59,6 +74,20 @@ class Tag {
         this.#color = color;
     }
 
+    // NOT empty
+    set id_user(id_user) {
+        if (!id_user) {
+            throw new TagException("User ID CANNOT be empty.")
+        }
+
+        // Check if ID exists
+        if (users_data.filter(i => i["id"] === id_user).length === 0) {
+            throw new TagException("User ID does NOT exist");
+        }
+
+        this.#id_user = id_user;
+    }
+
     // ====================
     // Getters
     // ====================
@@ -74,4 +103,23 @@ class Tag {
     get color() {
         return this.#color;
     }
+
+    get id_user() {
+        return this.#id_user;
+    }
+
+    // ====================
+    // To Object
+    // ====================
+
+    toObj() {
+        return {
+            id: this.id,
+            name: this.name,
+            color: this.color,
+            id_user: this.id_user,
+        };
+    }
 }
+
+module.exports = Tag;

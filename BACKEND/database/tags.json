@@ -1,7 +1,14 @@
 [
-    {
-        "id": 1,
-        "name": "urgent",
-        "color": "#8B0000"
-    }
+  {
+    "id": 1,
+    "name": "urgent",
+    "color": "#8B0000",
+    "id_user": 1
+  },
+  {
+    "id": 2,
+    "name": "home",
+    "color": "#0096FF",
+    "id_user": 1
+  }
 ]

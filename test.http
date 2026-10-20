@@ -109,3 +109,28 @@ Content-Type: application/json
 ###
 DELETE http://localhost:3000/tasks/2
 x-auth: yjhs-apologist
+
+// =======================
+// Tags
+// =======================
+
+// Post tag
+### 
+POST http://localhost:3000/tags
+x-auth: yjhs-apologist
+Content-Type: application/json
+
+{
+    "name": "home",
+    "color": "#0096FF"
+}
+
+// Search All User's Tags
+###
+GET http://localhost:3000/tags?page=1&limit=1
+x-auth: yjhs-apologist
+
+// Get specific tag
+### 
+GET http://localhost:3000/tags/2
+x-auth: yjhs-apologist

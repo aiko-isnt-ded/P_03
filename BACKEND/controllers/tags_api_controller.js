@@ -1,4 +1,101 @@
 // =======================
+// API Imports
+// =======================
+
+// Import Library
+const fs = require('fs');
+// Import Tag Model
+const Tag = require('../models/tag');
+// Load JSON DBs
+let tags = JSON.parse(fs.readFileSync('./database/tags.json'));
+let tasks = JSON.parse(fs.readFileSync('./database/tasks.json'));
+let users = JSON.parse(fs.readFileSync('./database/users.json'));
+
+// =======================
+// API Functions
+// =======================
+
+exports.authTagsMiddleware = (req, res, next) => {
+    try {
+        // Check whether a password was entered
+        let pwd = req.get('x-auth');
+        if (!pwd) return res.status(401).send('Password is missing');
+
+        // Validate user
+        let found_user = users.find(i => String(i.password) === pwd);
+        if (!found_user) return res.status(404).send('Invalid Password');
+
+        // If everything's well
+        req.user = found_user;
+        next()
+    } catch(err) {
+        return res.status(400).send(err.message);
+    }
+}
+
+// POST Method to create tag
+exports.registerTag = (req, res) => {
+    try {
+        // Get body params
+        let name = req.body.name;
+        let color = req.body.color;
+
+        if (!name || !color) return res.status(400).send('Tag MUST have both name and color');
+
+        // Create new Tag
+        let new_tag = new Tag(name, color, req.user.id);
+
+        // Send req
+        tags.push(new_tag.toObj());
+        fs.writeFileSync('./database/tags.json', JSON.stringify(tags, null, 2));
+        res.send('Tag Created');
+    } catch(err) {
+        return res.status(400).send(err.message);
+    }
+}
+
+// GET Method to Search ALL tags
+exports.userTags = (req, res) => {
+    try {
+        let page = parseInt(req.query.page);
+        let limit = parseInt(req.query.limit);
+
+        // Get user tags
+        let user_tags = tags.filter(i => String(i.id_user) === String(req.user.id));
+        
+        let start = (page - 1) * limit;
+        let end = start + limit;
+
+        // Send response
+        res.json({
+            page: page,
+            next_page: page + 1,
+            limit: limit,
+            total: tags.length,
+            data: user_tags.slice(start, end)
+        });
+    } catch(err) {
+        return res.status(400).send(err.message);
+    }
+}
+
+// GET Method to Search a Tag based on ID
+exports.searchTagbyID = (req, res) => {
+    try {
+        // Search for a tag based on ID
+        let found_tag = tags.find(i => String(i.id_user) === String(req.user.id) && String(i.id) === req.params.id);
+        
+        // If no tag was found
+        if (!found_tag) return res.status(404).send('Tag not Found');
+    
+        // Return response
+        res.json(found_tag);
+    } catch(err) {
+        return res.status(400).send(err.message);
+    }
+}
+
+// =======================
 // Functions
 // =======================
 

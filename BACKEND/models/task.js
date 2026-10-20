@@ -14,7 +14,7 @@ function getNextTaskID() {
 }
 
 // =======================
-// API stuff
+// Model
 // =======================
 
 class TaskException {

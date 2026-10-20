@@ -178,6 +178,7 @@ exports.patchTask = (req, res) => {
     }
 }
 
+// DELETE method
 exports.deleteTask = (req, res) => {
     try {
         // Get task index
