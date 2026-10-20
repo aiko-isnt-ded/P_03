@@ -1,6 +1,6 @@
-// =======================
-// Test Routes
-// =======================
+// ================================
+// PUNTO 1: Comprobar Rutas
+// ================================
 
 ### Root / no Auth: Login
 GET http://localhost:3000/
@@ -9,115 +9,203 @@ GET http://localhost:3000/
 GET http://localhost:3000/
 x-auth: test
 
-### Home / no Auth: 401
-GET http://localhost:3000/home.html
-
 ### Home / with Auth: Home
 GET http://localhost:3000/home.html
 x-auth: test
-
-### Login: Login
-GET http://localhost:3000/login.html
-
-### Tasks / no Auth: 401
-GET http://localhost:3000/tasks.html
 
 ### Tasks / with Auth: Tasks
 GET http://localhost:3000/tasks.html
 x-auth: test
 
-// =======================
-// Users
-// =======================
+// ================================
+// PUNTO 2: GET Users
+// ================================
 
-###
+// Get all users
+### 
+GET http://localhost:3000/users?page=1&limit=3
+x-auth: admin_auth
+
+// ================================
+// PUNTO 3: POST 3 Users + Check Tasks/Tags
+// ================================
+
+### Create Users
 POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-    "name": "Yoo Sangah",
-    "email": "yoo_sangah@kimcom.com",
-    "password": "123456789",
-    "confirm_password": "123456789"
+    "name": "Kim Dokja",
+    "email": "kim_dokja@kimcom.com",
+    "password": "yjhs-apologist",
+    "confirm_password": "yjhs-apologist"
 }
 
-// Get all users
+### Create Users
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "name": "Yoo Joonghyuk",
+    "email": "yoo_joonghyuk@kimcom.com",
+    "password": "supreme-king",
+    "confirm_password": "supreme-king"
+}
+
+### Create Users
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "name": "Han Sooyoung",
+    "email": "han_sooyoung@kimcom.com",
+    "password": "best_writer123",
+    "confirm_password": "best_writer123"
+}
+
+### Search All User's Tasks
+GET http://localhost:3000/tasks?page=1&limit=2
+x-auth: yjhs-apologist
+
+// Search All User's Tags
+###
+GET http://localhost:3000/tags?page=1&limit=1
+x-auth: yjhs-apologist
+
+// ================================
+// PUNTO 4: GET user with ID 2 
+// ================================
+
+// Get specific user
+### 
+GET http://localhost:3000/users/2
+x-auth: supreme-king
+
+// ================================
+// PUNTO 5: GET user page 1, limit 2 
+// ================================
+
 ### 
 GET http://localhost:3000/users?page=1&limit=2
 x-auth: admin_auth
 
-// Get specific user
-### 
-GET http://localhost:3000/users/4
-x-auth: 123456789
+// ================================
+// PUNTO 6: PATCH user 3
+// ================================
 
-// Update user
-### 
-PATCH http://localhost:3000/users/4
-x-auth: 123456789
+### Update user 3
+PATCH http://localhost:3000/users/3
+x-auth: best_writer123
 Content-Type: application/json
 
 {
-    "password": "987654321"
+    "name": "Vivienne Toledo De la Fuente"
 }
 
-// Delete user
-###
-DELETE http://localhost:3000/users/4
-x-auth: 123456789
+// ================================
+// PUNTO 7: Delete user 1
+// ================================
 
-// =======================
-// Tasks
-// =======================
+### Delete user
+DELETE http://localhost:3000/users/1
+x-auth: yjhs-apologist
 
-// Create Task
+### 
+GET http://localhost:3000/users?page=1&limit=10
+x-auth: admin_auth
+
+// ================================
+// PUNTO 8: Create 3 tasks
+// ================================
+
 ###
 POST http://localhost:3000/tasks
-x-auth: yjhs-apologist
+x-auth: supreme-king
 Content-Type: application/json
 
 {
-    "title": "Annoy my s/o's",
-    "description": "self-descriptive",
-    "due_date": "",
-    "id_user": 1,
-    "status": "C",
-    "tags": [1]
+    "title": "Get back Kim Dokja",
+    "due_date": "2026/12/31",
+    "id_user": 2,
+    "status": "A",
+    "tags": []
 }
 
-// Search All User's Tasks
 ###
-GET http://localhost:3000/tasks?page=1&limit=2
-x-auth: yjhs-apologist
+POST http://localhost:3000/tasks
+x-auth: supreme-king
+Content-Type: application/json
 
-// Get specific task
+{
+    "title": "Go out with Mia",
+    "due_date": "2026/10/16",
+    "id_user": 2,
+    "status": "C",
+    "tags": []
+}
+
+###
+POST http://localhost:3000/tasks
+x-auth: supreme-king
+Content-Type: application/json
+
+{
+    "title": "Finish Novel with Han Soooyoung",
+    "due_date": "2026/11/20",
+    "id_user": 2,
+    "status": "F",
+    "tags": []
+}
+
+// ================================
+// PUNTO 9: GET task w ID 1
+// ================================
+
 ### 
-GET http://localhost:3000/tasks/3
-x-auth: yjhs-apologist
+GET http://localhost:3000/tasks/1
+x-auth: supreme-king
 
-// Update task
+// ================================
+// PUNTO 10: GET tasks page 2, limit 1
+// ================================
+
+###
+GET http://localhost:3000/tasks?page=2&limit=1
+x-auth: supreme-king
+
+// ================================
+// PUNTO 11: Editar tarea 3
+// ================================
+
 ### 
 PATCH http://localhost:3000/tasks/3
-x-auth: yjhs-apologist
+x-auth: supreme-king
 Content-Type: application/json
 
 {
-    "description": "Gotta find new ways to annoy Sooyoung-ah"
+    "description": "Is an ending something to be decided for someone else?"
 }
+
+// ================================
+// PUNTO 12: Eliminar tarea 1
+// ================================
 
 // Delete task
 ###
-DELETE http://localhost:3000/tasks/2
-x-auth: yjhs-apologist
+DELETE http://localhost:3000/tasks/1
+x-auth: supreme-king
 
-// =======================
-// Tags
-// =======================
+###
+GET http://localhost:3000/tasks?page=1&limit=10
+x-auth: supreme-king
 
-// Post tag
+// ================================
+// PUNTO 13: Crear 3 tags para usuario 3 
+// ================================
+
 ### 
 POST http://localhost:3000/tags
-x-auth: yjhs-apologist
+x-auth: best_writer123
 Content-Type: application/json
 
 {
@@ -125,12 +213,63 @@ Content-Type: application/json
     "color": "#0096FF"
 }
 
-// Search All User's Tags
-###
-GET http://localhost:3000/tags?page=1&limit=1
-x-auth: yjhs-apologist
+### 
+POST http://localhost:3000/tags
+x-auth: best_writer123
+Content-Type: application/json
 
-// Get specific tag
+{
+    "name": "work",
+    "color": "#FF0000"
+}
+
+### 
+POST http://localhost:3000/tags
+x-auth: best_writer123
+Content-Type: application/json
+
+{
+    "name": "school",
+    "color": "#008000"
+}
+
+// ================================
+// PUNTO 14: Get etiqueta 2 
+// ================================
+
 ### 
 GET http://localhost:3000/tags/2
-x-auth: yjhs-apologist
+x-auth: best_writer123
+
+// ================================
+// PUNTO 15: Tags, page 1, limit 3
+// ================================
+
+###
+GET http://localhost:3000/tags?page=1&limit=3
+x-auth: best_writer123
+
+// ================================
+// PUNTO 16: Editar etiqueta 2
+// ================================
+
+### 
+PATCH http://localhost:3000/tags/2
+x-auth: best_writer123
+Content-Type: application/json
+
+{
+    "name": "masters"
+}
+
+// ================================
+// PUNTO 17: Eliminar etiqueta 1
+// ================================
+
+###
+DELETE http://localhost:3000/tags/1
+x-auth: best_writer123
+
+###
+GET http://localhost:3000/tags?page=1&limit=10
+x-auth: best_writer123

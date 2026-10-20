@@ -95,6 +95,90 @@ exports.searchTagbyID = (req, res) => {
     }
 }
 
+// PATCH Method to Update a Tag by ID
+exports.patchTag = (req, res) => {
+    try {
+        // Get body of the request
+        let body = req.body;
+
+        // Updatable fields
+        let fields = ['name', 'color'];
+        let changes = {};
+
+        // Iterate through the fields of the request body
+        for (const i of fields) {
+            // If field exists, change the field in body
+            if (i in body) {
+                changes[i] = body[i];
+            }
+        }
+
+        // Error message: No valid fields
+        if (Object.keys(changes).length === 0) {
+            return res.status(400).send('No valid fields were given');
+        }
+
+        // Find the tag
+        let index = tags.findIndex(i => String(i.id) === req.params.id && String(i.id_user) === String(req.user.id));
+        if (index === -1) {
+            return res.status(404).send("Tag not Found");
+        }
+
+        // Create updated tag
+        let data = {...tags[index], ...changes};
+        let new_tag = new Tag(data.name, data.color, data.id_user);
+        let updated_tag = {...new_tag.toObj(), id: tags[index].id};
+
+        // Update the tag
+        let updated_tags = [...tags];
+        updated_tags[index] = updated_tag;
+    
+        fs.writeFileSync('./database/tags.json', JSON.stringify(updated_tags, null, 2));
+        tags = updated_tags;
+
+        res.json ({
+            message: "Tag updated successfully!",
+            tag: updated_tag
+        });
+    } catch(err) {
+        return res.status(400).send(err.message);
+    }
+}
+
+// DELETE method
+exports.deleteTag = (req, res) => {
+    try {
+        // Get tag index
+        let index = tags.findIndex(i => String(i.id) === req.params.id && String(i.id_user) === String(req.user.id));
+
+        // If no index found
+        if (index === -1) return res.status(404).send('Tag not Found');
+
+        // If task was found
+        let tag_id = tags[index].id;
+
+        // Check if tag is used by any task
+        let tag_used = tasks.some(i => Array.isArray(i.tags) && i.tags.some(j => j === tag_id)); 
+        if (tag_used) return res.status(400).send('Tag is in use by a task and CANNOT be deleted');
+
+        // If task isn't being used
+        let deleted_tag = tags[index];
+        let new_tags = tags.filter(i => String(i.id) !== String(tag_id));
+
+        // Write new file
+        fs.writeFileSync('./database/tags.json', JSON.stringify(new_tags, null, 2));
+        tags = new_tags;
+
+        // Send response
+        res.json({
+            message: `Tag with ID ${req.params.id} was successfully deleted`,
+            tag: deleted_tag
+        });
+    } catch(err) {
+        return res.status(400).send(err.message);
+    }
+}
+
 // =======================
 // Functions
 // =======================
@@ -151,7 +235,7 @@ function updateTag(id, obj_new_info) {
     return updated;
 }
 
-function deleteTag(id) {
+function oldDeleteTag(id) {
     let index = data.tags.findIndex(tag => tag.id == id);
 
     if (index == -1) {

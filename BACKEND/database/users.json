@@ -1,23 +1,16 @@
 [
   {
-    "id": 1,
-    "name": "Kim Dokja",
-    "email": "kim_dokja@kimcom.com",
-    "password": "yjhs-apologist",
-    "joined_at": "2026-10-16T00:34:34.580Z"
-  },
-  {
     "id": 2,
     "name": "Yoo Joonghyuk",
     "email": "yoo_joonghyuk@kimcom.com",
-    "password": "gH12fHfds#",
-    "joined_at": "2026-10-18T19:05:38.617Z"
+    "password": "supreme-king",
+    "joined_at": "2026-10-20T04:17:19.220Z"
   },
   {
     "id": 3,
-    "name": "Han Sooyoung",
+    "name": "Vivienne Toledo De la Fuente",
     "email": "han_sooyoung@kimcom.com",
-    "password": "bestWriter123",
-    "joined_at": "2026-10-18T19:17:48.549Z"
+    "password": "best_writer123",
+    "joined_at": "2026-10-20T04:17:21.535Z"
   }
 ]

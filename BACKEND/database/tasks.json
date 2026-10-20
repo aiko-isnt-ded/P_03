@@ -1,24 +1,20 @@
 [
   {
-    "id": 1,
-    "title": "Self-Sacrifice for the Eleventh Time",
-    "description": "self-descriptive",
-    "due_date": "2026-10-16T00:00:00.000Z",
-    "id_user": 1,
+    "id": 2,
+    "title": "Go out with Mia",
+    "description": "",
+    "due_date": "2026-10-16T06:00:00.000Z",
+    "id_user": 2,
     "status": "C",
-    "tags": [
-      1
-    ]
+    "tags": []
   },
   {
     "id": 3,
-    "title": "Annoy my s/o's",
-    "description": "Gotta find new ways to annoy Sooyoung-ah",
-    "due_date": "2026-10-20T00:12:26.190Z",
-    "id_user": 1,
-    "status": "C",
-    "tags": [
-      1
-    ]
+    "title": "Finish Novel with Han Soooyoung",
+    "description": "Is an ending something to be decided for someone else?",
+    "due_date": "2026-11-20T06:00:00.000Z",
+    "id_user": 2,
+    "status": "F",
+    "tags": []
   }
 ]

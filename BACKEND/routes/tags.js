@@ -21,11 +21,11 @@ routerTags.post('/', tagsController.registerTag);
 routerTags.get('/', tagsController.userTags);
 routerTags.get('/:id', tagsController.searchTagbyID);
 
-// // PATCH Method
-// routerTags.patch('/:id', tasksController.patchTask);
+// PATCH Method
+routerTags.patch('/:id', tagsController.patchTag);
 
-// // DELETE Method
-// routerTags.delete('/:id', tasksController.deleteTask);
+// DELETE Method
+routerTags.delete('/:id', tagsController.deleteTag);
 
 // Export router
 module.exports = routerTags;

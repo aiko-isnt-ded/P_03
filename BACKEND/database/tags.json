@@ -1,14 +1,14 @@
 [
   {
-    "id": 1,
-    "name": "urgent",
-    "color": "#8B0000",
-    "id_user": 1
+    "id": 2,
+    "name": "masters",
+    "color": "#FF0000",
+    "id_user": 3
   },
   {
-    "id": 2,
-    "name": "home",
-    "color": "#0096FF",
-    "id_user": 1
+    "id": 3,
+    "name": "school",
+    "color": "#008000",
+    "id_user": 3
   }
 ]
