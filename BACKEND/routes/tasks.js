@@ -19,7 +19,7 @@ routerTasks.post('/', tasksController.authTasksMiddleware, tasksController.regis
 // GET Methods
 routerTasks.get('/', tasksController.authTasksMiddleware2, tasksController.userTasks);
 
-routerTasks.use('/:id', tasksController.authTasksMiddleware2, tasksController.searchTaskbyID);
+routerTasks.get('/:id', tasksController.authTasksMiddleware2, tasksController.searchTaskbyID);
 
 // PATCH Method
 routerTasks.patch('/:id', tasksController.authTasksMiddleware2, tasksController.patchTask);

@@ -43,11 +43,11 @@ exports.authTasksMiddleware2 = (req, res, next) => {
     try {
         // Check whether a password was entered
         let pwd = req.get('x-auth');
-        if (!pwd) return res.status(401).send("Did not provide password!");
+        if (!pwd) return res.status(401).send("Password is missing");
 
         // Find users based on password
         let found_user = users.find(i => String(i.password) === pwd);
-        if (!found_user) return res.status(404).send("User Not Found");
+        if (!found_user) return res.status(404).send("User not Found");
 
         req.user = found_user;
         next();
@@ -159,8 +159,7 @@ exports.patchTask = (req, res) => {
 
         // Create updated task
         let data = {...tasks[index], ...changes};
-        let new_task = new Task(data.title, data.description, data.due_date, 
-            data.id_user, data.status, data.tags);
+        let new_task = new Task(data.title, data.description, data.due_date, data.id_user, data.status, data.tags);
         let updated_task = {...new_task.toObj(), id: tasks[index].id};
 
         // Update the task
